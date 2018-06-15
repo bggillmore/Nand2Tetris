@@ -105,4 +105,14 @@ public class Parser {
         }
     }
     
+    public String jump(){
+        String jmpString = this.removeExtraFormatting();
+        if(this.commandType() == 2 && jmpString.contains(";")){
+            jmpString = jmpString.substring(jmpString.indexOf(";")+1);
+            return jmpString;
+        }
+        else{
+            return "";
+        }
+    }
 }

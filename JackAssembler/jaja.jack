@@ -1,57 +1,57 @@
 
 
-A
-
-D
-
-M
 
 
 
 
 
 
-M
+JNE
+
+JEQ
 
 
 
-M
-M
-0
-D+1
 
-D
-
-D-A
-
-
-
-A
-
-D
+JNE
 
 
 
 
 
-M
 
 
 
-M
-M
--1
-D+1
 
-D
 
-D-A
+JLE
 
 
 
-A
-
-D
 
 
 
+JMP
+
+
+
+
+JEQ
+
+
+
+
+
+
+
+
+
+
+JLE
+
+
+
+
+
+
+JMP
