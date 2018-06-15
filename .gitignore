@@ -3,5 +3,10 @@ tools/
 *.tst
 *.out
 *.html
-00/
-demo/
+projects/00/
+projects/demo/
+*.mf
+*.xml
+JackAssembler/build/
+JackAssembler/test/
+JackAssembler/nbproject/
