@@ -95,9 +95,9 @@ public class Parser {
     
     //removes the comp mnemonic and returns it
     public String comp(){
-        String compString = this.currentLine;
-        if(this.commandType() == 2 && compString.contains(";")){
-            compString = compString.substring(0, compString.indexOf(";"));
+        String compString = this.removeExtraFormatting();
+        if(this.commandType() == 2 && compString.contains("=")){
+            compString = compString.substring(compString.indexOf("=")+1);
             return compString;
         }
         else{
