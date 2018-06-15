@@ -66,6 +66,9 @@ public class Parser {
         if(this.commandType() == 2 && destString.contains("=")){
             destString =  destString.substring(0, destString.indexOf("="));
         }
+        else if(this.commandType() == 2 && destString.contains(";")){
+            destString =  destString.substring(0, destString.indexOf(";"));
+        }
         else{
             destString = "";
         }
