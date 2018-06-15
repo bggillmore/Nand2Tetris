@@ -1,0 +1,115 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM64.hdl
+
+/**
+ * Memory of 64 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+    // Put your code here:
+	//load code
+	DMux8Way(in=load, sel=address[3..5], a=a, b=b, c=c, d=d, e=e, f=f, g=g, h=h);
+	DMux8Way(in=a, sel=address[0..2], a=aa, b=ab, c=ac, d=ad, e=ae, f=af, g=ag, h=ah);
+	DMux8Way(in=b, sel=address[0..2], a=ba, b=bb, c=bc, d=bd, e=be, f=bf, g=bg, h=bh);
+	DMux8Way(in=c, sel=address[0..2], a=ca, b=cb, c=cc, d=cd, e=ce, f=cf, g=cg, h=ch);
+	DMux8Way(in=d, sel=address[0..2], a=da, b=db, c=dc, d=dd, e=de, f=df, g=dg, h=dh);
+	DMux8Way(in=e, sel=address[0..2], a=ea, b=eb, c=ec, d=ed, e=ee, f=ef, g=eg, h=eh);
+	DMux8Way(in=f, sel=address[0..2], a=fa, b=fb, c=fc, d=fd, e=fe, f=ff, g=fg, h=fh);
+	DMux8Way(in=g, sel=address[0..2], a=ga, b=gb, c=gc, d=gd, e=ge, f=gf, g=gg, h=gh);
+	DMux8Way(in=h, sel=address[0..2], a=ha, b=hb, c=hc, d=hd, e=he, f=hf, g=hg, h=hh);
+	
+	//registers
+	Register(in=in, load=aa, out=outAA);
+	Register(in=in, load=ab, out=outAB);
+	Register(in=in, load=ac, out=outAC);
+	Register(in=in, load=ad, out=outAD);
+	Register(in=in, load=ae, out=outAE);
+	Register(in=in, load=af, out=outAF);
+	Register(in=in, load=ag, out=outAG);
+	Register(in=in, load=ah, out=outAH);
+	
+	Register(in=in, load=ba, out=outBA);
+	Register(in=in, load=bb, out=outBB);
+	Register(in=in, load=bc, out=outBC);
+	Register(in=in, load=bd, out=outBD);
+	Register(in=in, load=be, out=outBE);
+	Register(in=in, load=bf, out=outBF);
+	Register(in=in, load=bg, out=outBG);
+	Register(in=in, load=bh, out=outBH);
+	
+	Register(in=in, load=ca, out=outCA);
+	Register(in=in, load=cb, out=outCB);
+	Register(in=in, load=cc, out=outCC);
+	Register(in=in, load=cd, out=outCD);
+	Register(in=in, load=ce, out=outCE);
+	Register(in=in, load=cf, out=outCF);
+	Register(in=in, load=cg, out=outCG);
+	Register(in=in, load=ch, out=outCH);
+	
+	Register(in=in, load=da, out=outDA);
+	Register(in=in, load=db, out=outDB);
+	Register(in=in, load=dc, out=outDC);
+	Register(in=in, load=dd, out=outDD);
+	Register(in=in, load=de, out=outDE);
+	Register(in=in, load=df, out=outDF);
+	Register(in=in, load=dg, out=outDG);
+	Register(in=in, load=dh, out=outDH);
+	
+	Register(in=in, load=ea, out=outEA);
+	Register(in=in, load=eb, out=outEB);
+	Register(in=in, load=ec, out=outEC);
+	Register(in=in, load=ed, out=outED);
+	Register(in=in, load=ee, out=outEE);
+	Register(in=in, load=ef, out=outEF);
+	Register(in=in, load=eg, out=outEG);
+	Register(in=in, load=eh, out=outEH);
+	
+	Register(in=in, load=fa, out=outFA);
+	Register(in=in, load=fb, out=outFB);
+	Register(in=in, load=fc, out=outFC);
+	Register(in=in, load=fd, out=outFD);
+	Register(in=in, load=fe, out=outFE);
+	Register(in=in, load=ff, out=outFF);
+	Register(in=in, load=fg, out=outFG);
+	Register(in=in, load=fh, out=outFH);
+	
+	Register(in=in, load=ga, out=outGA);
+	Register(in=in, load=gb, out=outGB);
+	Register(in=in, load=gc, out=outGC);
+	Register(in=in, load=gd, out=outGD);
+	Register(in=in, load=ge, out=outGE);
+	Register(in=in, load=gf, out=outGF);
+	Register(in=in, load=gg, out=outGG);
+	Register(in=in, load=gh, out=outGH);
+	
+	Register(in=in, load=ha, out=outHA);
+	Register(in=in, load=hb, out=outHB);
+	Register(in=in, load=hc, out=outHC);
+	Register(in=in, load=hd, out=outHD);
+	Register(in=in, load=he, out=outHE);
+	Register(in=in, load=hf, out=outHF);
+	Register(in=in, load=hg, out=outHG);
+	Register(in=in, load=hh, out=outHH);
+	
+	//selection structure
+	Mux8Way16(sel=address[0..2], a=outAA, b=outAB, c=outAC, d=outAD, e=outAE, f=outAF, g=outAG, h=outAH, out=outABank);
+	Mux8Way16(sel=address[0..2], a=outBA, b=outBB, c=outBC, d=outBD, e=outBE, f=outBF, g=outBG, h=outBH, out=outBBank);
+	Mux8Way16(sel=address[0..2], a=outCA, b=outCB, c=outCC, d=outCD, e=outCE, f=outCF, g=outCG, h=outCH, out=outCBank);
+	Mux8Way16(sel=address[0..2], a=outDA, b=outDB, c=outDC, d=outDD, e=outDE, f=outDF, g=outDG, h=outDH, out=outDBank);
+	Mux8Way16(sel=address[0..2], a=outEA, b=outEB, c=outEC, d=outED, e=outEE, f=outEF, g=outEG, h=outEH, out=outEBank);
+	Mux8Way16(sel=address[0..2], a=outFA, b=outFB, c=outFC, d=outFD, e=outFE, f=outFF, g=outFG, h=outFH, out=outFBank);
+	Mux8Way16(sel=address[0..2], a=outGA, b=outGB, c=outGC, d=outGD, e=outGE, f=outGF, g=outGG, h=outGH, out=outGBank);
+	Mux8Way16(sel=address[0..2], a=outHA, b=outHB, c=outHC, d=outHD, e=outHE, f=outHF, g=outHG, h=outHH, out=outHBank);
+	
+	Mux8Way16(sel=address[3..5], a=outABank, b=outBBank, c=outCBank, d=outDBank, e=outEBank, f=outFBank, g=outGBank, h=outHBank, out=out);
+	
+}

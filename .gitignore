@@ -1,0 +1,7 @@
+tools/
+*.cmp
+*.tst
+*.out
+*.html
+00/
+demo/
