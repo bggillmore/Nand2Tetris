@@ -36,13 +36,24 @@ public class JackAssembler {
             Parser thisLine = new Parser(currentLine);
             
             if(!thisLine.removeExtraFormatting().equals("")){
-                outFile.println(thisLine.removeExtraFormatting());
-                if(thisLine.commandType() == 2){
-                    outFile.print("111");
-                    outFile.print(Code.comp(thisLine.comp()));
-                    outFile.print(Code.dest(thisLine.dest()));
-                    outFile.print(Code.jump(thisLine.jump()));
-                    outFile.println();
+                //outFile.println(thisLine.removeExtraFormatting());
+                switch(thisLine.commandType()){
+                    case 0://labels
+                        break;
+                    case 1://A commands
+                        if(thisLine.isNumeric()){
+                            int binInt = Integer.parseInt(thisLine.symbol());
+                            outFile.print("0" + Code.toBinString(binInt, 15));
+                            outFile.println();
+                        }
+                        break;
+                    case 2://C commands
+                        outFile.print("111");
+                        outFile.print(Code.comp(thisLine.comp()));
+                        outFile.print(Code.dest(thisLine.dest()));
+                        outFile.print(Code.jump(thisLine.jump()));
+                        outFile.println();
+                        break;
                 }
             }
 

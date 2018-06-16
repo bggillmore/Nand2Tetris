@@ -185,4 +185,15 @@ public class Code {
         }
         return jumpString;
     }
+    
+    //converts integer(arg 1) to binary string of selected length(arg 2)
+    public static String toBinString(int binInt, int binStringLength){
+        String binString;
+        binString = Integer.toBinaryString(binInt);
+        //add "0"'s to front of bin string if length is less than the given
+        while(binString.length() < binStringLength){
+            binString = "0" + binString;
+        }
+        return binString;
+    }
 }

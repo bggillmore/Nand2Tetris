@@ -109,6 +109,7 @@ public class Parser {
         }
     }
     
+    //removes jump mnemonic and returns it
     public String jump(){
         String jmpString = this.removeExtraFormatting();
         if(this.commandType() == 2 && jmpString.contains(";")){
@@ -117,6 +118,18 @@ public class Parser {
         }
         else{
             return "";
+        }
+    }
+    
+    //returns bool, true if string input is numeric false if not
+    public boolean isNumeric(){
+        String inputString = this.symbol();
+        try{
+            Integer.parseInt(inputString);
+            return true;
+        }
+        catch(NumberFormatException e){
+            return false;
         }
     }
 }
