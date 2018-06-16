@@ -66,9 +66,6 @@ public class Parser {
         if(this.commandType() == 2 && destString.contains("=")){
             destString =  destString.substring(0, destString.indexOf("="));
         }
-        else if(this.commandType() == 2 && destString.contains(";")){
-            destString =  destString.substring(0, destString.indexOf(";"));
-        }
         else{
             destString = "";
         }
@@ -101,6 +98,10 @@ public class Parser {
         String compString = this.removeExtraFormatting();
         if(this.commandType() == 2 && compString.contains("=")){
             compString = compString.substring(compString.indexOf("=")+1);
+            return compString;
+        }
+        else if(this.commandType() == 2 && compString.contains(";")){
+            compString = compString.substring(0, compString.indexOf(";"));
             return compString;
         }
         else{

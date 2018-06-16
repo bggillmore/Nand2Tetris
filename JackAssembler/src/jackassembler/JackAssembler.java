@@ -36,9 +36,14 @@ public class JackAssembler {
             Parser thisLine = new Parser(currentLine);
             
             if(!thisLine.removeExtraFormatting().equals("")){
-                outFile.print(Code.dest(thisLine.dest()));
-                outFile.print(Code.comp(thisLine.comp()));
-                outFile.println();
+                outFile.println(thisLine.removeExtraFormatting());
+                if(thisLine.commandType() == 2){
+                    outFile.print("111");
+                    outFile.print(Code.comp(thisLine.comp()));
+                    outFile.print(Code.dest(thisLine.dest()));
+                    outFile.print(Code.jump(thisLine.jump()));
+                    outFile.println();
+                }
             }
 
         }

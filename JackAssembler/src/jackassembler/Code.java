@@ -33,9 +33,6 @@ public class Code {
     //converts the inputted dest string to binary, if dest is unknown it returns an empty string
     public static String dest(String destString){
         switch(destString){
-            case "null":
-                destString = "000";
-                break;
             case "M":
                 destString = "001";
                 break;
@@ -58,7 +55,7 @@ public class Code {
                 destString = "111";
                 break;
             default:
-                destString = "";
+                destString = "000";
                 break;
         }
         return destString;
@@ -158,4 +155,34 @@ public class Code {
         return compString;
     }
     
+    //converts the inputted jump string to binary, if unknown it returns an empty string
+    public static String jump(String jumpString){
+        switch(jumpString){
+            case "JGT":
+                jumpString = "001";
+                break;
+            case "JEQ":
+                jumpString = "010";
+                break;
+            case "JGE":
+                jumpString = "011";
+                break;
+            case "JLT":
+                jumpString = "100";
+                break;
+            case "JNE":
+                jumpString = "101";
+                break;
+            case "JLE":
+                jumpString = "110";
+                break;
+            case "JMP":
+                jumpString = "111";
+                break;
+            default:
+                jumpString = "000";
+                break;
+        }
+        return jumpString;
+    }
 }
