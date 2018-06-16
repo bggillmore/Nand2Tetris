@@ -151,8 +151,9 @@ public class Code {
             case "D|M":
                 compString = "1010101";
                 break;
-            
-            
+            default:
+                compString = "";
+                break;
         }
         return compString;
     }
