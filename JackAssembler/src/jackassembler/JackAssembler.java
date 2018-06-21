@@ -13,7 +13,7 @@ public class JackAssembler {
     
     public static void main(String[] args) throws IOException {
         String fileName, binFile, currentLine;
-        int count = 0;
+        int count = 0, symNumber = 0;
         boolean secondPass = false;
         //read input file and create reader
         System.out.print("Enter name of assembly file: ");
@@ -54,8 +54,14 @@ public class JackAssembler {
                             }
                             else if(symTable.contains(thisLine.symbol())){ //prints the references to line numbers from labels
                                 outFile.println("0" + 
-                                Code.toBinString(symTable.getAddress(thisLine.symbol()), 15)+ thisLine.symbol());
+                                Code.toBinString(symTable.getAddress(thisLine.symbol()), 15));
                             } 
+                            else{
+                                symTable.addEntry(thisLine.symbol(), 16+symNumber);
+                                symNumber++;
+                                outFile.println(0 + 
+                                        Code.toBinString(symTable.getAddress(thisLine.symbol()), 15));
+                            }
                         }
                         count++; //only inc the line count if its not a comment and not a label
                         break;
