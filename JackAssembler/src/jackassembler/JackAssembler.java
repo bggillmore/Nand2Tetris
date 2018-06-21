@@ -13,8 +13,9 @@ public class JackAssembler {
     
     public static void main(String[] args) throws IOException {
         String fileName, binFile, currentLine;
-        int count;
-        //read input file and reader
+        int count = 0;
+        boolean secondPass = false;
+        //read input file and create reader
         System.out.print("Enter name of assembly file: ");
         fileName = console.next();
         
@@ -22,7 +23,7 @@ public class JackAssembler {
         Scanner inFile = new Scanner(asmFile);
         
         //create output file and writer
-        System.out.print("Enter name of outputfile (existing files will be over writen): ");
+        System.out.print("Enter name of output file (existing files will be over writen): ");
         binFile = console.next();
         
         FileWriter fw = new FileWriter(binFile, false);
@@ -32,47 +33,53 @@ public class JackAssembler {
         SymbolTable symTable = new SymbolTable();
         
         //itterate through each line and start to parse
-        count=0;
         while(inFile.hasNext()){
             currentLine = inFile.nextLine();
             
             Parser thisLine = new Parser(currentLine);
             if(!thisLine.removeExtraFormatting().equals("")){
-                //outFile.println(thisLine.removeExtraFormatting());
                 switch(thisLine.commandType()){
                     case 0://labels
-                        symTable.addEntry(thisLine.symbol(), count);
-                        //outFile.println(symTable.getAddress(thisLine.symbol()));
+                        if(!secondPass){//only operate on L commands if on first pass
+                            symTable.addEntry(thisLine.symbol(), count);
+                        }
                         break;
+                        
                     case 1://A commands
-                        if(thisLine.isNumeric()){ //prints the numeric A instructions
-                            int binInt = Integer.parseInt(thisLine.symbol());
-                            outFile.print("0" + Code.toBinString(binInt, 15));
+                        if(secondPass){ // only operate on A commands if on second pass
+                           if(thisLine.isNumeric()){ //prints the numeric A instructions
+                                int binInt = Integer.parseInt(thisLine.symbol());
+                                outFile.print("0" + Code.toBinString(binInt, 15));
+                                outFile.println();
+                            }
+                            else if(symTable.contains(thisLine.symbol())){ //prints the references to line numbers from labels
+                                outFile.println("0" + 
+                                Code.toBinString(symTable.getAddress(thisLine.symbol()), 15)+ thisLine.symbol());
+                            } 
+                        }
+                        count++; //only inc the line count if its not a comment and not a label
+                        break;
+                        
+                    case 2://C commands
+                        if(secondPass){ //only operate on c commands on second pass
+                            outFile.print("111");
+                            outFile.print(Code.comp(thisLine.comp()));
+                            outFile.print(Code.dest(thisLine.dest()));
+                            outFile.print(Code.jump(thisLine.jump()));
                             outFile.println();
                         }
-                        else if(symTable.contains(thisLine.symbol())){ //prints the references to line numbers from labels
-                            outFile.println("0" + 
-                                    Code.toBinString(symTable.getAddress(thisLine.symbol()), 15)+ thisLine.symbol());
-                        }
-                        //NOTES!!!
-                        /* you need to make a two pass assembler because if you reerence a label
-                         * before you use it your symbol table will not contain the correct symbol.
-                         * 1st pass: only add labels to table
-                         * 2nd pass: do everything else but leave counter as is. You can use the last line number as your
-                         * 1st variable space. That or copy what the book examples did. 
-                         * you also need to figure out register addressing and hard code their values in.
-                         */
                         count++; //only inc the line count if its not a comment and not a label
                         break;
-                    case 2://C commands
-                        outFile.print("111");
-                        outFile.print(Code.comp(thisLine.comp()));
-                        outFile.print(Code.dest(thisLine.dest()));
-                        outFile.print(Code.jump(thisLine.jump()));
-                        outFile.println();
-                        count++; //only inc the line count if its not a comment and not a label
-                        break;
+                        
                 }
+            }
+            //resets the scanner by creating a new one, resets the line count
+            //and moves on to second pass.
+            if(!inFile.hasNext() && !secondPass){
+                secondPass = true;
+                count = 0;
+                inFile.close();
+                inFile = new Scanner(asmFile);
             }
         }
         inFile.close();
