@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jackassembler;
+package hackassembler;
 
 /**
- *
- * @author Graham
+ * Benjamin Gillmore
+ * 6/21/2018
+ * This parser module breaks up lines of assembly code into its individual parts.
  */
 public class Parser {
     private String currentLine;

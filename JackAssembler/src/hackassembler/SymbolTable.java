@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jackassembler;
+package hackassembler;
 
 import java.util.HashMap;
 
 /**
- *
- * @author Graham
- * 
+ * Benjamin Gillmore
+ * 6/21/18
+ * Symbol Table implementation to store and translate mem locations from labels and variables 
  */
 
 public final class SymbolTable {

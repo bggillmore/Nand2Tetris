@@ -1,20 +1,22 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Benjamin Gillmore
+ * 6/21/18
+ * Hack assembler based on the book Nand2Tetris.
  */
-package jackassembler;
+package hackassembler;
 import java.util.Scanner;
 import java.io.*;
 
-public class JackAssembler {
+public class HackAssembler {
     //create global scanner object
     static Scanner console = new Scanner(System.in);
     
     public static void main(String[] args) throws IOException {
+        //declare variables
         String fileName, binFile, currentLine;
         int count = 0, symNumber = 0;
         boolean secondPass = false;
+        
         //read input file and create reader
         System.out.print("Enter name of assembly file: ");
         fileName = console.next();
@@ -35,8 +37,9 @@ public class JackAssembler {
         //itterate through each line and start to parse
         while(inFile.hasNext()){
             currentLine = inFile.nextLine();
-            
             Parser thisLine = new Parser(currentLine);
+            
+            //cleans input and breaks down what type of instruction it is
             if(!thisLine.removeExtraFormatting().equals("")){
                 switch(thisLine.commandType()){
                     case 0://labels
@@ -56,7 +59,7 @@ public class JackAssembler {
                                 outFile.println("0" + 
                                 Code.toBinString(symTable.getAddress(thisLine.symbol()), 15));
                             } 
-                            else{
+                            else{ //adds variables to symtable and prints their mem location
                                 symTable.addEntry(thisLine.symbol(), 16+symNumber);
                                 symNumber++;
                                 outFile.println(0 + 

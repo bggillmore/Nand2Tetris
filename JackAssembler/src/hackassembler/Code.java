@@ -3,33 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jackassembler;
+package hackassembler;
 
 /**
- *
- * @author Graham
+ * Benjamin Gillmore
+ * 6/21/18
+ * This is the code module that translates part of the assembly language into binary
  */
 public class Code {
-    /*
-    //variables
-    private String currentLine;
     
-    //constructors
-    public Code(){
-        this("");
-    }
-    public Code(String currentLine){
-        this.currentLine = currentLine;
-    }
-    
-    //setters and getters
-    public void setCurrentLine(String currentLine){
-        this.currentLine = currentLine;
-    }
-    public String getCurrentLine(){
-        return this.currentLine;
-    }
-    */
     //converts the inputted dest string to binary, if dest is unknown it returns an empty string
     public static String dest(String destString){
         switch(destString){
