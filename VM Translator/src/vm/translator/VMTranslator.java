@@ -24,16 +24,8 @@ public class VMTranslator {
         //variable declaration
         String path, binFile, thisLine;
         
-        //get path from user
-        System.out.println("Enter the path of the containing folder.");
-        System.out.print("Enter 'c' for current dir: ");
-        path = console.next();
-        
-        if(path.equals("c")){
-            path = System.getProperty("user.dir");
-        }
-        
         //get *.vm files from path
+        path = System.getProperty("user.dir");
         File folder = new File(path);
         
         /* The next 6 lines i dont fully get. I know im creating a list of all
