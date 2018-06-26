@@ -10,3 +10,5 @@ projects/demo/
 JackAssembler/build/
 JackAssembler/test/
 JackAssembler/nbproject/
+/VM Translator/nbproject/private/
+/VM Translator/build/
