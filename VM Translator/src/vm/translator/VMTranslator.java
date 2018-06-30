@@ -58,6 +58,7 @@ public class VMTranslator {
                 //thisLine = currentLine.commandType();
                 //thisLine = currentLine.removeExtraFormatting();
                 thisLine = currentLine.arg1();
+                //thisLine = currentLine.arg2();
                 if(!thisLine.equals("")){
                     outFile.println(thisLine);
                 }

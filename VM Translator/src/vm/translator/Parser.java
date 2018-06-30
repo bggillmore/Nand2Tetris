@@ -75,21 +75,62 @@ public class Parser {
     //returns arg1 
     public String arg1(){
         String commandType = this.commandType();
-        String arg1String = this.currentLine;
+        String arg1String = this.removeExtraFormatting();
+        //pull out the first arguement of selected cases
         switch(commandType){
             case "C_PUSH":
-                arg1String = arg1String.substring(arg1String.indexOf(" ") + 1, arg1String.indexOf(" ", arg1String.indexOf(" ") + 1));
-                break;
             case "C_POP":
-                arg1String = arg1String.substring(arg1String.indexOf(" ") + 1, arg1String.indexOf(" ", arg1String.indexOf(" ") + 1));
+            case "C_CALL":
+            case "C_FUNCTION":
+                arg1String = arg1String.substring(arg1String.indexOf(" ") + 1, 
+                        arg1String.indexOf(" ", arg1String.indexOf(" ") + 1));
                 break;
             case "C_ARITHMITIC":
+                break;
+            case "C_LABEL":
+            case "C_GOTO":
+            case "C_IF":
+                arg1String = arg1String.substring(arg1String.indexOf(" ") + 1);
                 break;
             default:
                 arg1String = "";
                 break;
         }
+        //remove extra spaces even tho there should be none
+        arg1String = arg1String.replace(" ", "");
         return arg1String;
     }
     
+    //returns arg2 value
+    public int arg2(){
+        String commandType = this.commandType();
+        String arg2String = this.removeExtraFormatting();
+        int arg2Int;
+        
+        //select last arg from string
+        switch(commandType){
+            case "C_PUSH":
+            case "C_POP":
+            case "C_FUNCTION":
+            case "C_CALL":
+                arg2String = arg2String.substring(arg2String.indexOf(" ", arg2String.indexOf(" ")+1) +1);
+                arg2String = arg2String.replace(" ", "");
+                break;
+            default:
+                arg2String = "";
+                break;
+        }
+        
+        //convert to int, -99999 if null or empty
+        if(arg2String != null && !arg2String.isEmpty()){
+            arg2Int = Integer.parseInt(arg2String);
+        }
+        else{
+            arg2Int = -99999; // this is to show if i somehow didnt select the correct characters from the string or 
+                              // it was called incorrectly. it should never run because it should not be called on  
+                              // any commands other than push pop function or call but if it does it should be obvious 
+                              // to pick out considering it is out of the range on a 16 bit computer
+        }
+        return arg2Int;
+    }
 }
