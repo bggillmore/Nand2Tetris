@@ -36,7 +36,7 @@ public class Parser {
     }
     
     //returns type of current command
-    enum commandName{
+    public enum commandName{
         C_PUSH, C_POP, C_LABEL, C_IF, C_GOTO, C_FUNCTION, C_RETURN, C_CALL, C_ARITHMETIC;
     }
     public commandName commandType(){

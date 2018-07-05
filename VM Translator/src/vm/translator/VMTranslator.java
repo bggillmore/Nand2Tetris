@@ -60,7 +60,20 @@ public class VMTranslator {
                 //thisLine = currentLine.arg1();
                 //thisLine = currentLine.arg2();
                 if(!thisLine.equals("")){
-                    outFile.println(currentLine.arg2());
+                    if(currentLine.commandType()!= null){
+                        switch(currentLine.commandType()){
+                            case C_ARITHMETIC:
+                                outFile.println(CodeWriter.writeArithmetic(currentLine.arg1()));
+                                break;
+                            case C_PUSH:
+                            case C_POP:
+                                outFile.println(CodeWriter.WritePushPop(currentLine.commandType(), currentLine.arg1(), currentLine.arg2()));
+                                break;
+                            default:
+                                break;
+                                
+                        }
+                    }
                 }
             }
 
