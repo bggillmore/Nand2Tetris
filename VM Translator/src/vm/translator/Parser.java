@@ -36,65 +36,70 @@ public class Parser {
     }
     
     //returns type of current command
-    public String commandType(){
+    enum commandName{
+        C_PUSH, C_POP, C_LABEL, C_IF, C_GOTO, C_FUNCTION, C_RETURN, C_CALL, C_ARITHMETIC;
+    }
+    public commandName commandType(){
         String commandString = this.removeExtraFormatting();
-        String commandType;
+        commandName commandType = null;
         if(!commandString.equals("")){
             if(commandString.contains("push")){
-            commandType = "C_PUSH";
+            commandType = commandName.C_PUSH;
             }
             else if(commandString.contains("pop")){
-                commandType = "C_POP";
+                commandType = commandName.C_POP;
             }
             else if(commandString.contains("label")){
-                commandType = "C_LABEL";
+                commandType = commandName.C_LABEL;
             }
             else if(commandString.contains("if-goto")){
-                commandType = "C_IF";
+                commandType = commandName.C_IF;
             }
             else if(commandString.contains("goto") && !commandString.contains("if")){
-                commandType = "C_GOTO";
+                commandType = commandName.C_GOTO;
             }
             else if(commandString.contains("function")){
-                commandType = "C_FUNCTION";
+                commandType = commandName.C_FUNCTION;
             }
             else if(commandString.contains("return")){
-                commandType = "C_RETURN";
+                commandType = commandName.C_RETURN;
             }
             else if(commandString.contains("call")){
-                commandType = "C_CALL";
+                commandType = commandName.C_CALL;
             }
             else{
-                commandType = "C_ARITHMITIC";
+                commandType = commandName.C_ARITHMETIC;
             }
             return commandType;
         }
-        return "";
+        return null;
     }
     
     //returns arg1 
     public String arg1(){
-        String commandType = this.commandType();
+        commandName commandType = this.commandType();
         String arg1String = this.removeExtraFormatting();
         //pull out the first arguement of selected cases
-        switch(commandType){
-            case "C_PUSH":
-            case "C_POP":
-            case "C_CALL":
-            case "C_FUNCTION":
-                arg1String = arg1String.substring(arg1String.indexOf(" ") + 1, 
-                        arg1String.indexOf(" ", arg1String.indexOf(" ") + 1));
-                break;
-            case "C_ARITHMITIC":
-                break;
-            case "C_LABEL":
-            case "C_GOTO":
-            case "C_IF":
-                arg1String = arg1String.substring(arg1String.indexOf(" ") + 1);
-                break;
-            default:
-                arg1String = "";
-                break;
+        if(commandType != null){
+            switch(commandType){
+                case C_PUSH:
+                case C_POP:
+                case C_CALL:
+                case C_FUNCTION:
+                    arg1String = arg1String.substring(arg1String.indexOf(" ") + 1, 
+                            arg1String.indexOf(" ", arg1String.indexOf(" ") + 1));
+                    break;
+                case C_ARITHMETIC:
+                    break;
+                case C_LABEL:
+                case C_GOTO:
+                case C_IF:
+                    arg1String = arg1String.substring(arg1String.indexOf(" ") + 1);
+                    break;
+                default:
+                    arg1String = "";
+                    break;
+            }
         }
         //remove extra spaces even tho there should be none
         arg1String = arg1String.replace(" ", "");
@@ -103,24 +108,25 @@ public class Parser {
     
     //returns arg2 value
     public int arg2(){
-        String commandType = this.commandType();
+        commandName commandType = this.commandType();
         String arg2String = this.removeExtraFormatting();
         int arg2Int;
         
         //select last arg from string
-        switch(commandType){
-            case "C_PUSH":
-            case "C_POP":
-            case "C_FUNCTION":
-            case "C_CALL":
-                arg2String = arg2String.substring(arg2String.indexOf(" ", arg2String.indexOf(" ")+1) +1);
-                arg2String = arg2String.replace(" ", "");
-                break;
-            default:
-                arg2String = "";
-                break;
+        if(commandType != null){
+            switch(commandType){
+                case C_PUSH:
+                case C_POP:
+                case C_FUNCTION:
+                case C_CALL:
+                    arg2String = arg2String.substring(arg2String.indexOf(" ", arg2String.indexOf(" ")+1) +1);
+                    arg2String = arg2String.replace(" ", "");
+                    break;
+                default:
+                    arg2String = "";
+                    break;
+            }
         }
-        
         //convert to int, -99999 if null or empty
         if(arg2String != null && !arg2String.isEmpty()){
             arg2Int = Integer.parseInt(arg2String);
