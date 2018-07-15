@@ -441,7 +441,7 @@ M=D
 A=M-1
 D=M
 A=A-1
-D=D-M
+D=M-D
 M=D
 D=A+1
 @SP
@@ -477,6 +477,16 @@ D=A+1
 @SP
 M=D
 
+//and
+@SP
+A=M-1
+D=M
+A=A-1
+D=D|M
+M=D
+D=A+1
+@SP
+M=D
 
 //not
 @SP

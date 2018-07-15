@@ -41,7 +41,7 @@ public class CodeWriter {
                 asmString += "A=M-1\n";
                 asmString += "D=M\n";
                 asmString += "A=A-1\n";
-                asmString += "D=D-M\n";
+                asmString += "D=M-D\n";
                 asmString += "M=D\n";
                 asmString += "D=A+1\n";
                 asmString += "@SP\n";
@@ -54,6 +54,18 @@ public class CodeWriter {
                 asmString += "D=M\n";
                 asmString += "A=A-1\n";
                 asmString += "D=D&M\n";
+                asmString += "M=D\n";
+                asmString += "D=A+1\n";
+                asmString += "@SP\n";
+                asmString += "M=D\n";
+                break;
+            case "or":
+                asmString += "//and\n";
+                asmString += "@SP\n";
+                asmString += "A=M-1\n";
+                asmString += "D=M\n";
+                asmString += "A=A-1\n";
+                asmString += "D=D|M\n";
                 asmString += "M=D\n";
                 asmString += "D=A+1\n";
                 asmString += "@SP\n";
