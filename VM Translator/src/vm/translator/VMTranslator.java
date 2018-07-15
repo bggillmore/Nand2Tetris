@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.toBinaryString;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class VMTranslator {
@@ -23,6 +25,8 @@ public class VMTranslator {
     public static void main(String[] args) throws IOException {
         //variable declaration
         String path, binFile, thisLine;
+        String additionString1, additionString2;
+        int index = 0;
         
         //get *.vm files from path
         path = System.getProperty("user.dir");
@@ -49,30 +53,39 @@ public class VMTranslator {
         FileWriter fw = new FileWriter(binFile, false);
         PrintWriter outFile = new PrintWriter(fw);
         
+        
         //for each file create new scanner and begine to parse
         for(File file : fileList){
             inFile = new Scanner(file);
             while(inFile.hasNext()){
                 thisLine = inFile.nextLine();
                 Parser currentLine = new Parser(thisLine);
-                //thisLine = currentLine.commandType();
-                //thisLine = currentLine.removeExtraFormatting();
-                //thisLine = currentLine.arg1();
-                //thisLine = currentLine.arg2();
+                
+                /*
+                 * You need to create a hash table, seperate the switch statement for the hash table 
+                 * and the switch statement for the codewriter. They are basically the same just do it for clarity.
+                 * Also CodeWriter needs to be rewriten to utilize the hashtable.
+                 */
+                
                 if(!thisLine.equals("")){
                     if(currentLine.commandType()!= null){
+                        
+                        //Switch statement for writing code to file.
                         switch(currentLine.commandType()){
                             case C_ARITHMETIC:
                                 outFile.println(CodeWriter.writeArithmetic(currentLine.arg1()));
                                 break;
                             case C_PUSH:
                             case C_POP:
-                                outFile.println(CodeWriter.WritePushPop(currentLine.commandType(), currentLine.arg1(), currentLine.arg2()));
+                                outFile.println(CodeWriter.WritePushPop(
+                                        currentLine.commandType(), 
+                                        currentLine.arg1(), 
+                                        currentLine.arg2()));
                                 break;
                             default:
-                                break;
-                                
+                                break; 
                         }
+                        index++; //keeps track of the index of the stack
                     }
                 }
             }

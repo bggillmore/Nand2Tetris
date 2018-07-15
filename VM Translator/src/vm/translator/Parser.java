@@ -41,7 +41,7 @@ public class Parser {
     }
     public commandName commandType(){
         String commandString = this.removeExtraFormatting();
-        commandName commandType = null;
+        commandName commandType;
         if(!commandString.equals("")){
             if(commandString.contains("push")){
             commandType = commandName.C_PUSH;
