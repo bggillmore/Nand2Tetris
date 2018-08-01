@@ -60,7 +60,7 @@ public class CodeWriter {
                 asmString += "M=D\n";
                 break;
             case "or":
-                asmString += "//and\n";
+                asmString += "//or\n";
                 asmString += "@SP\n";
                 asmString += "A=M-1\n";
                 asmString += "D=M\n";
@@ -117,7 +117,7 @@ public class CodeWriter {
                 eqCounter++;
                 break;
             case "gt":
-                asmString += "//eq\n";
+                asmString += "//gt\n";
                 asmString += "@SP\n";
                 asmString += "A=M-1\n";
                 asmString += "D=-M\n";
@@ -142,7 +142,7 @@ public class CodeWriter {
                 gtCounter++;
                 break;
             case "lt":
-                asmString += "//eq\n";
+                asmString += "//lt\n";
                 asmString += "@SP\n";
                 asmString += "A=M-1\n";
                 asmString += "D=-M\n";
@@ -178,25 +178,183 @@ public class CodeWriter {
     public static String WritePushPop (commandName command, String segment, int index){ 
         String asmString = "";
         switch(command.toString()){
+            //all 8 segment options for Push
             case "C_PUSH":
-                if(segment.equals("constant")){
-                    asmString += "//" + command + " " + segment + " " + index +"\n";
-                    asmString += "@" + index + "\n";
-                    asmString += "D=A\n";
-                    asmString += "@SP\n";
-                    asmString += "A=M\n";
-                    asmString += "M=D\n";
-                    asmString += "D=A+1\n";
-                    asmString += "@SP\n";
-                    asmString += "M=D\n";
-                    
-                }
-                else if(segment.equals("local")){
-                    asmString += "";
+                switch(segment){
+                    case "constant":
+                        asmString += "//push constant " + index +"\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
+                        break;
+                    case "local":
+                        asmString += "//push local " + index +"\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@LCL\n";
+                        asmString += "A=M+D\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
+                        break;
+                        
+                    case "argument":
+                        asmString += "//push argument " + index +"\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@ARG\n";
+                        asmString += "A=M+D\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
+                        break;
+                        
+                    case "this":
+                        asmString += "//push this " + index +"\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@THIS\n";
+                        asmString += "A=M+D\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
+                        break;
+                    case "that":
+                        asmString += "//push that " + index +"\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@THAT\n";
+                        asmString += "A=M+D\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
+                        break;
+                    case "temp":
+                        asmString += "//push temp " + index +"\n";
+                        asmString += "@R" + (index + 5) + "\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
+                        break;
+                    case "pointer":
+                        
+                        break;
+                    case "static":
+                        
+                        break;
+                    default:
+                        asmString = "";
+                        break;
                 }
                 break;
+            //all 8 segment options for POP  
             case "C_POP":
-                
+                switch(segment){
+                    case "constant":
+                        //nothing?
+                        break;
+                    case "local":
+                        asmString += "//pop local " + index +"\n";
+                        asmString += "@LCL\n";
+                        asmString += "D=M\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A+D\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        break;
+                    case "argument":
+                        asmString += "//pop argument " + index +"\n";
+                        asmString += "@ARG\n";
+                        asmString += "D=M\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A+D\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        break;
+                    case "this":
+                        asmString += "//pop this " + index +"\n";
+                        asmString += "@THIS\n";
+                        asmString += "D=M\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A+D\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        break;
+                    case "that":
+                        asmString += "//pop that " + index +"\n";
+                        asmString += "@THAT\n";
+                        asmString += "D=M\n";
+                        asmString += "@" + index + "\n";
+                        asmString += "D=A+D\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        break;
+                    case "temp":
+                        asmString += "//pop temp " + index +"\n";
+                        asmString += "@R" + (index + 5) + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        break;
+                    case "static":
+                        //nothing?
+                        break;
+                    case "pointer":
+                        
+                        break;
+                    default:
+                        asmString = "";
+                        break;
+                }
                 break;
             default:
                 asmString = "";
