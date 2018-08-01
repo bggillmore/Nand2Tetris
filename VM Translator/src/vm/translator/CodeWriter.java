@@ -256,7 +256,14 @@ public class CodeWriter {
                         asmString += "M=M+1\n";
                         break;
                     case "pointer":
-                        
+                        asmString += "//push pointer " + index +"\n";
+                        asmString += "@R" + (index + 3) + "\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
                         break;
                     case "static":
                         
@@ -349,7 +356,17 @@ public class CodeWriter {
                         //nothing?
                         break;
                     case "pointer":
-                        
+                        asmString += "//pop pointer " + index +"\n";
+                        asmString += "@R" + (index + 3) + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
                         break;
                     default:
                         asmString = "";
