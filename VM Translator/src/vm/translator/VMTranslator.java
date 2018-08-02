@@ -11,8 +11,6 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Integer.toBinaryString;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class VMTranslator {
@@ -25,8 +23,6 @@ public class VMTranslator {
     public static void main(String[] args) throws IOException {
         //variable declaration
         String path, binFile, thisLine;
-        String additionString1, additionString2;
-        int index = 0;
         
         //get *.vm files from path
         path = System.getProperty("user.dir");
@@ -80,12 +76,11 @@ public class VMTranslator {
                                 outFile.println(CodeWriter.WritePushPop(
                                         currentLine.commandType(), 
                                         currentLine.arg1(), 
-                                        currentLine.arg2()));
+                                        currentLine.arg2(), binFile));
                                 break;
                             default:
                                 break; 
                         }
-                        index++; //keeps track of the index of the stack
                     }
                 }
             }

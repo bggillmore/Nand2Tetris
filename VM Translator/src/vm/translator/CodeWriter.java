@@ -175,7 +175,7 @@ public class CodeWriter {
     
     //Writes the assembly code that is the translation of the given command, 
     //where command is one of the two enumerated values: C_PUSH or C_POP. 
-    public static String WritePushPop (commandName command, String segment, int index){ 
+    public static String WritePushPop (commandName command, String segment, int index, String binFile){ 
         String asmString = "";
         switch(command.toString()){
             //all 8 segment options for Push
@@ -266,7 +266,14 @@ public class CodeWriter {
                         asmString += "M=M+1\n";
                         break;
                     case "static":
-                        
+                        asmString += "//push static " + index +"\n";
+                        asmString += "@" + binFile + "." + index + "\n";
+                        asmString += "D=M\n";
+                        asmString += "@SP\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "M=M+1\n";
                         break;
                     default:
                         asmString = "";
@@ -353,7 +360,18 @@ public class CodeWriter {
                         asmString += "M=D\n";
                         break;
                     case "static":
-                        //nothing?
+                        asmString += "//pop static " + index +"\n";
+                        asmString += "@" + binFile + "." + index + "\n";
+                        asmString += "D=A\n";
+                        asmString += "@R13\n";
+                        asmString += "M=D\n";
+                        asmString += "@SP\n";
+                        asmString += "AM=M-1\n";
+                        asmString += "D=M\n";
+                        asmString += "@R13\n";
+                        asmString += "A=M\n";
+                        asmString += "M=D\n";
+                        
                         break;
                     case "pointer":
                         asmString += "//pop pointer " + index +"\n";
