@@ -18,6 +18,7 @@ public class CodeWriter {
     static int eqCounter = 0;
     static int gtCounter = 0;
     static int ltCounter = 0;
+    static String functionName = null;
     //Writes the asmbely code that is the translation of the given arithmatic command
     public static String writeArithmetic(String arthString){
         String asmString = ""; 
@@ -395,6 +396,58 @@ public class CodeWriter {
                 asmString = "";
                 break;
         }
+        return asmString;
+    }
+    
+    public static String writeInit(){
+        
+        return "";
+    }
+    
+    public static String writeLabel(String label){
+        String asmString = "";
+        
+        asmString += "//Label " + functionName + "." + label +"\n";
+        asmString += "(" + functionName + "." + label + ")\n";
+        return asmString;
+    }
+    
+    public static String writeGoTo(String label){
+        String asmString = "";
+        
+        asmString += "//GoTo " + functionName + "." + label +"\n";
+        asmString += "@" + functionName + "." + label + "\n";
+        asmString += "0;JMP\n";
+        return asmString;
+    }
+    
+    public static String writeIf(String label){
+        String asmString = "";
+        
+        asmString += "//If_GoTo " + functionName + "." + label +"\n";
+        asmString += "@SP\n";
+        asmString += "AM=M-1\n";
+        asmString += "D=M\n";
+        asmString += "@" + functionName + "." + label + "\n";
+        asmString += "D;JGT\n";
+        return asmString;
+    }
+    
+    public static String writeCall(String functionName, int numArgs){
+        String asmString = "";
+        asmString += "\n";
+        return asmString;
+    }
+    
+    public static String writeReturn(){
+        String asmString = "";
+        asmString += "\n";
+        return asmString;
+    }
+    
+    public static String writeFunction(String functionName, int numLocals){
+        String asmString = "";
+        asmString += "\n";
         return asmString;
     }
 }

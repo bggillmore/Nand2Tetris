@@ -78,6 +78,15 @@ public class VMTranslator {
                                         currentLine.arg1(), 
                                         currentLine.arg2(), binFile));
                                 break;
+                            case C_LABEL:
+                                outFile.println(CodeWriter.writeLabel(currentLine.arg1()));
+                                break;
+                            case C_IF:
+                                outFile.println(CodeWriter.writeIf(currentLine.arg1()));
+                                break;
+                            case C_GOTO:
+                                outFile.println(CodeWriter.writeGoTo(currentLine.arg1()));
+                                break;
                             default:
                                 break; 
                         }
