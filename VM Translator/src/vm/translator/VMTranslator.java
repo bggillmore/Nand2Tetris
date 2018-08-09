@@ -69,23 +69,48 @@ public class VMTranslator {
                         //Switch statement for writing code to file.
                         switch(currentLine.commandType()){
                             case C_ARITHMETIC:
-                                outFile.println(CodeWriter.writeArithmetic(currentLine.arg1()));
+                                outFile.println(CodeWriter.writeArithmetic(
+                                        currentLine.arg1()
+                                ));
                                 break;
                             case C_PUSH:
                             case C_POP:
                                 outFile.println(CodeWriter.WritePushPop(
                                         currentLine.commandType(), 
                                         currentLine.arg1(), 
-                                        currentLine.arg2(), binFile));
+                                        currentLine.arg2(), 
+                                        binFile
+                                ));
                                 break;
                             case C_LABEL:
-                                outFile.println(CodeWriter.writeLabel(currentLine.arg1()));
+                                outFile.println(CodeWriter.writeLabel(
+                                        currentLine.arg1()
+                                ));
                                 break;
                             case C_IF:
-                                outFile.println(CodeWriter.writeIf(currentLine.arg1()));
+                                outFile.println(CodeWriter.writeIf(
+                                        currentLine.arg1()
+                                ));
                                 break;
                             case C_GOTO:
-                                outFile.println(CodeWriter.writeGoTo(currentLine.arg1()));
+                                outFile.println(CodeWriter.writeGoTo(
+                                        currentLine.arg1()
+                                ));
+                                break;
+                            case C_CALL:
+                                outFile.println(CodeWriter.writeCall(
+                                        currentLine.arg1(), 
+                                        currentLine.arg2()
+                                ));
+                                break;
+                            case C_FUNCTION:
+                                outFile.println(CodeWriter.writeFunction(
+                                        currentLine.arg1(), 
+                                        currentLine.arg2()
+                                ));
+                                break;
+                            case C_RETURN:
+                                outFile.println(CodeWriter.writeReturn());
                                 break;
                             default:
                                 break; 

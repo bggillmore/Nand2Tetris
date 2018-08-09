@@ -18,7 +18,7 @@ public class CodeWriter {
     static int eqCounter = 0;
     static int gtCounter = 0;
     static int ltCounter = 0;
-    static String functionName = null;
+    static String functionNamePath = null;
     //Writes the asmbely code that is the translation of the given arithmatic command
     public static String writeArithmetic(String arthString){
         String asmString = ""; 
@@ -404,50 +404,236 @@ public class CodeWriter {
         return "";
     }
     
+    //Writes the assembly code that is the translation of the given label command.
     public static String writeLabel(String label){
         String asmString = "";
         
-        asmString += "//Label " + functionName + "." + label +"\n";
-        asmString += "(" + functionName + "." + label + ")\n";
+        asmString += "//Label " + functionNamePath + "." + label +"\n";
+        asmString += "(" + functionNamePath + "." + label + ")\n";
         return asmString;
     }
     
+    //Writes the assembly code that is the translation of the given goto command. 
     public static String writeGoTo(String label){
         String asmString = "";
         
-        asmString += "//GoTo " + functionName + "." + label +"\n";
-        asmString += "@" + functionName + "." + label + "\n";
+        asmString += "//GoTo " + functionNamePath + "." + label +"\n";
+        asmString += "@" + functionNamePath + "." + label + "\n";
         asmString += "0;JMP\n";
         return asmString;
     }
     
+    //Writes the assembly code that is the translation of the given if-goto command. 
     public static String writeIf(String label){
         String asmString = "";
         
-        asmString += "//If_GoTo " + functionName + "." + label +"\n";
+        asmString += "//If_GoTo " + functionNamePath + "." + label +"\n";
         asmString += "@SP\n";
         asmString += "AM=M-1\n";
         asmString += "D=M\n";
-        asmString += "@" + functionName + "." + label + "\n";
+        asmString += "@" + functionNamePath + "." + label + "\n";
         asmString += "D;JGT\n";
         return asmString;
     }
     
+    //Writes the assembly code that is the translation of the given Call command. 
     public static String writeCall(String functionName, int numArgs){
         String asmString = "";
-        asmString += "\n";
+        
+        //comment for debugging
+        asmString += "//writeCall " + functionName + " " + numArgs + "\n";
+        
+        //push return address
+        asmString += "@" + functionNamePath + "_return\n";
+        asmString += "D=A\n";
+        asmString += "@SP\n";
+        asmString += "A=M\n";
+        asmString += "M=D\n";
+        asmString += "@SP\n";
+        asmString += "M=M+1\n";
+        
+        //save LCL of calling function
+        asmString += "@LCL\n";
+        asmString += "D=M\n";
+        asmString += "@SP\n";
+        asmString += "A=M\n";
+        asmString += "M=D\n";
+        asmString += "@SP\n";
+        asmString += "M=M+1\n";
+        
+        //save ARG of calling function
+        asmString += "@ARG\n";
+        asmString += "D=M\n";
+        asmString += "@SP\n";
+        asmString += "A=M\n";
+        asmString += "M=D\n";
+        asmString += "@SP\n";
+        asmString += "M=M+1\n";
+        
+        //save THIS of calling function
+        asmString += "@THIS\n";
+        asmString += "D=M\n";
+        asmString += "@SP\n";
+        asmString += "A=M\n";
+        asmString += "M=D\n";
+        asmString += "@SP\n";
+        asmString += "M=M+1\n";
+        
+        //save THAT of calling function
+        asmString += "@THAT\n";
+        asmString += "D=M\n";
+        asmString += "@SP\n";
+        asmString += "A=M\n";
+        asmString += "M=D\n";
+        asmString += "@SP\n";
+        asmString += "M=M+1\n";
+        
+        //reposition ARG
+        asmString += "@SP\n";
+        asmString += "D=A\n";
+        asmString += "@5\n";
+        asmString += "D=D-A\n";
+        asmString += "@" + numArgs + "\n";
+        asmString += "D=D-A\n";
+        asmString += "@ARG\n";
+        asmString += "M=D\n";
+        
+        //reposition LCL 
+        asmString += "@SP\n";
+        asmString += "D=M\n";
+        asmString += "@LCL\n";
+        asmString += "M=D\n";
+        
+        //transfer control 
+        asmString += "@" + functionName + "\n";
+        asmString += "0;JMP";
+        
+        //label for return address
+        asmString += "(" + functionName + "_return)\n";
+        
         return asmString;
     }
     
+    //Writes the assembly code that is the translation of the given Return command. 
     public static String writeReturn(){
         String asmString = "";
-        asmString += "\n";
+        
+        //comment for debugging
+        asmString += "//writeReturn\n";
+        
+        //FRAME is a temporary variable
+        asmString += "@LCL\n";
+        asmString += "D=M\n";
+        asmString += "@FRAME\n";
+        asmString += "M=D\n";
+        
+        //save return address in a temp. var 
+        asmString += "@FRAME\n";
+        asmString += "D=M\n";
+        asmString += "@5\n";
+        asmString += "A=D-A\n";
+        asmString += "D=M\n";
+        asmString += "@RET\n";
+        asmString += "M=D\n";
+        
+        //reposition return value for caller 
+        asmString += "@SP\n";
+        asmString += "A=M-1\n";
+        asmString += "D=M\n";
+        asmString += "@ARG\n";
+        asmString += "A=M\n";
+        asmString += "M=D\n";
+        
+        //restore SP for caller
+        asmString += "@ARG\n";
+        asmString += "D=M+1\n";
+        asmString += "@SP\n";
+        asmString += "M=D\n";
+        
+        //restore THAT of calling function
+        asmString += "@FRAME\n";
+        asmString += "A=M-1\n";
+        asmString += "D=M\n";
+        asmString += "@THAT\n";
+        asmString += "M=D\n";
+        
+        //restore THIS of calling function
+        asmString += "@FRAME\n";
+        asmString += "D=M\n";
+        asmString += "@2\n";
+        asmString += "A=D-A\n";
+        asmString += "D=M\n";
+        asmString += "@THIS\n";
+        asmString += "M=D\n";
+        
+        //restore ARG of calling function
+        asmString += "@FRAME\n";
+        asmString += "D=M\n";
+        asmString += "@3\n";
+        asmString += "A=D-A\n";
+        asmString += "D=M\n";
+        asmString += "@ARG\n";
+        asmString += "M=D\n";
+        
+        //restore LCL of calling function
+        asmString += "@FRAME\n";
+        asmString += "D=M\n";
+        asmString += "@4\n";
+        asmString += "A=D-A\n";
+        asmString += "D=M\n";
+        asmString += "@LCL\n";
+        asmString += "M=D\n";
+        
+        //GOTO the return-address 
+        asmString += "@RET\n";
+        asmString += "A=M\n";
+        asmString += "0;JMP\n";
+        
         return asmString;
     }
     
+    //Writes the assembly code that is the translation of the given Function command. 
     public static String writeFunction(String functionName, int numLocals){
         String asmString = "";
-        asmString += "\n";
+        
+        //comment for debugging
+        asmString += "//writeFunction " + functionName + " " + numLocals + "\n";
+        
+        //declare label for function entry 
+        asmString += "("+ functionName + ")\n";
+        
+        //initialize to 0 and push all local variables
+        int itteration = 0;
+        while(numLocals > 0){
+            asmString += "@LCL\n";
+            asmString += "D=M\n";
+            asmString += "@" + itteration + "\n";
+            asmString += "A=D+A\n";
+            asmString += "M=0\n";
+            asmString += "@SP\n";
+            asmString += "M=M+1\n";
+            
+            itteration++;
+            numLocals--;
+        }
+        
+        
+        /*int itteration = 0;
+        while(numLocals > 0){
+            asmString += "@LCL\n";
+            asmString += "D=M\n";
+            asmString += "@" + itteration + "\n";
+            asmString += "A=D+A\n";
+            asmString += "M=0\n";
+            asmString += "@SP\n";
+            asmString += "A=M\n";
+            asmString += "M=0\n";
+            asmString += "@SP\n";
+            asmString += "M=M+1\n";
+            
+            itteration++;
+            numLocals--;
+        }*/
         return asmString;
     }
 }
