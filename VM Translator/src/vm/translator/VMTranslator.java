@@ -53,6 +53,9 @@ public class VMTranslator {
         //for each file create new scanner and begine to parse
         for(File file : fileList){
             inFile = new Scanner(file);
+            if(inFile.hasNext()){
+                outFile.println(CodeWriter.writeInit());
+            }
             while(inFile.hasNext()){
                 thisLine = inFile.nextLine();
                 Parser currentLine = new Parser(thisLine);

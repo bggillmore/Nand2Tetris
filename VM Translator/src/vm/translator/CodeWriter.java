@@ -399,11 +399,6 @@ public class CodeWriter {
         return asmString;
     }
     
-    public static String writeInit(){
-        
-        return "";
-    }
-    
     //Writes the assembly code that is the translation of the given label command.
     public static String writeLabel(String label){
         String asmString = "";
@@ -432,14 +427,15 @@ public class CodeWriter {
         asmString += "AM=M-1\n";
         asmString += "D=M\n";
         asmString += "@" + functionNamePath + "." + label + "\n";
-        asmString += "D;JGT\n";
+        asmString += "D;JNE\n";
         return asmString;
     }
     
     //Writes the assembly code that is the translation of the given Call command. 
+    static int callIndex = 0;
     public static String writeCall(String functionName, int numArgs){
         String asmString = "";
-        
+        functionNamePath = functionName + "_" + callIndex;
         //comment for debugging
         asmString += "//writeCall " + functionName + " " + numArgs + "\n";
         
@@ -490,7 +486,7 @@ public class CodeWriter {
         
         //reposition ARG
         asmString += "@SP\n";
-        asmString += "D=A\n";
+        asmString += "D=M\n";
         asmString += "@5\n";
         asmString += "D=D-A\n";
         asmString += "@" + numArgs + "\n";
@@ -506,11 +502,12 @@ public class CodeWriter {
         
         //transfer control 
         asmString += "@" + functionName + "\n";
-        asmString += "0;JMP";
+        asmString += "0;JMP\n";
         
         //label for return address
-        asmString += "(" + functionName + "_return)\n";
-        
+        asmString += "(" + functionNamePath + "_return)\n";
+        functionNamePath = null;
+        callIndex++;
         return asmString;
     }
     
@@ -543,6 +540,8 @@ public class CodeWriter {
         asmString += "@ARG\n";
         asmString += "A=M\n";
         asmString += "M=D\n";
+        asmString += "@SP\n";
+        asmString += "M=M-1\n";
         
         //restore SP for caller
         asmString += "@ARG\n";
@@ -617,23 +616,19 @@ public class CodeWriter {
             numLocals--;
         }
         
-        
-        /*int itteration = 0;
-        while(numLocals > 0){
-            asmString += "@LCL\n";
-            asmString += "D=M\n";
-            asmString += "@" + itteration + "\n";
-            asmString += "A=D+A\n";
-            asmString += "M=0\n";
-            asmString += "@SP\n";
-            asmString += "A=M\n";
-            asmString += "M=0\n";
-            asmString += "@SP\n";
-            asmString += "M=M+1\n";
-            
-            itteration++;
-            numLocals--;
-        }*/
+        return asmString;
+    }
+    
+    //Writes the assembly code that effects the VM initialization (also called bootstrap
+    //code). This code should be placed in the ROM beginning in address 0x0000.
+    public static String writeInit(){
+        String asmString = "";
+        asmString += "@256\n";
+        asmString += "D=A\n";
+        asmString += "@SP\n";
+        asmString += "M=D\n";
+        asmString += "@Sys.init\n";
+        asmString += "0;JMP\n";
         return asmString;
     }
 }
