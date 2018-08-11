@@ -1,4 +1,4 @@
-@256
+@261
 D=A
 @SP
 M=D
@@ -21,7 +21,7 @@ M=D
 M=M+1
 
 //pop static 0
-@StaticsTest.asm.0
+@Class1.vm.0
 D=A
 @R13
 M=D
@@ -45,7 +45,7 @@ M=D
 M=M+1
 
 //pop static 1
-@StaticsTest.asm.1
+@Class1.vm.1
 D=A
 @R13
 M=D
@@ -123,7 +123,7 @@ A=M
 (Class1.get)
 
 //push static 0
-@StaticsTest.asm.0
+@Class1.vm.0
 D=M
 @SP
 A=M
@@ -132,7 +132,7 @@ M=D
 M=M+1
 
 //push static 1
-@StaticsTest.asm.1
+@Class1.vm.1
 D=M
 @SP
 A=M
@@ -228,7 +228,7 @@ M=D
 M=M+1
 
 //pop static 0
-@StaticsTest.asm.0
+@Class2.vm.0
 D=A
 @R13
 M=D
@@ -252,7 +252,7 @@ M=D
 M=M+1
 
 //pop static 1
-@StaticsTest.asm.1
+@Class2.vm.1
 D=A
 @R13
 M=D
@@ -330,7 +330,7 @@ A=M
 (Class2.get)
 
 //push static 0
-@StaticsTest.asm.0
+@Class2.vm.0
 D=M
 @SP
 A=M
@@ -339,7 +339,7 @@ M=D
 M=M+1
 
 //push static 1
-@StaticsTest.asm.1
+@Class2.vm.1
 D=M
 @SP
 A=M

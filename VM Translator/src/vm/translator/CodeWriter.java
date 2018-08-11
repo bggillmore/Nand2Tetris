@@ -623,7 +623,7 @@ public class CodeWriter {
     //code). This code should be placed in the ROM beginning in address 0x0000.
     public static String writeInit(){
         String asmString = "";
-        asmString += "@256\n";
+        asmString += "@261\n";
         asmString += "D=A\n";
         asmString += "@SP\n";
         asmString += "M=D\n";

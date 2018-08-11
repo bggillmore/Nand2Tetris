@@ -53,7 +53,9 @@ public class VMTranslator {
         //for each file create new scanner and begine to parse
         for(File file : fileList){
             inFile = new Scanner(file);
+            String fileName = file.toString();
             if(inFile.hasNext()){
+                fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
                 outFile.println(CodeWriter.writeInit());
             }
             while(inFile.hasNext()){
@@ -82,7 +84,7 @@ public class VMTranslator {
                                         currentLine.commandType(), 
                                         currentLine.arg1(), 
                                         currentLine.arg2(), 
-                                        binFile
+                                        fileName
                                 ));
                                 break;
                             case C_LABEL:
